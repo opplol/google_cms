@@ -2,3 +2,4 @@ token.json
 drive_token.json
 !.gitkeep
 .vscode/
+lib/config/

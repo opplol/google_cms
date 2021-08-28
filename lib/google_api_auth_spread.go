@@ -19,7 +19,7 @@ type GoogleApiAuthSpread struct {
 	auth_common_methods
 }
 
-//go:embed config/credentials.json
+//go:embed config/spread_credentials.json
 var credentials_spread []byte
 
 func (h GoogleApiAuthSpread) CredentialApi(fileId string, sheetModel *[]model.DocuFirst) (string, error) {
