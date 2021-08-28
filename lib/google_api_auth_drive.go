@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 
 	"golang.org/x/oauth2"
@@ -16,6 +15,7 @@ import (
 )
 
 type GoogleApiAuthDrive struct {
+	auth_common_methods
 	AuthUrl string `xorm: "Auth url string" form: "authurl" json: "authurl"`
 	FileId  string `xorm: "cms file id string" form: "file id" json: "file id"`
 }
@@ -31,7 +31,8 @@ func (h GoogleApiAuthDrive) CredentialApi(docu_name string) (*GoogleApiAuthDrive
 	if err != nil {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
-	client, err := h.getClient(config)
+	tokFile := "drive_token.json"
+	client, err := h.getClient(tokFile, config)
 	if err != nil {
 		authURL := config.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
 		h.AuthUrl = authURL
@@ -58,31 +59,6 @@ func (h GoogleApiAuthDrive) CredentialApi(docu_name string) (*GoogleApiAuthDrive
 	}
 
 	return &h, nil
-}
-
-// Retrieve a token, saves the token, then returns the generated client.
-func (h GoogleApiAuthDrive) getClient(config *oauth2.Config) (*http.Client, error) {
-	// The file token.json stores the user's access and refresh tokens, and is
-	// created automatically when the authorization flow completes for the first
-	// time.
-	tokFile := "drive_token.json"
-	tok, err := h.tokenFromFile(tokFile)
-	if err != nil {
-		return nil, err
-	}
-	return config.Client(context.Background(), tok), nil
-}
-
-// Retrieves a token from a local file.
-func (h GoogleApiAuthDrive) tokenFromFile(file string) (*oauth2.Token, error) {
-	f, err := os.Open(file)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-	tok := &oauth2.Token{}
-	err = json.NewDecoder(f).Decode(tok)
-	return tok, err
 }
 
 // Saves a token to a file path.

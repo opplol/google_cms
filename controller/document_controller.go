@@ -57,7 +57,7 @@ func valid_google_oauth_and_get_list(c *gin.Context) string {
 	author := new(lib.GoogleApiAuthDrive)
 	result, err := author.CredentialApi(c.Param("page"))
 	if err != nil {
-		c.Redirect(http.StatusPermanentRedirect, result.AuthUrl)
+		c.Redirect(http.StatusTemporaryRedirect, result.AuthUrl)
 	}
 	return result.FileId
 }

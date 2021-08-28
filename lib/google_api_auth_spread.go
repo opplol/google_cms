@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 
 	"golang.org/x/oauth2"
@@ -16,7 +15,9 @@ import (
 	"google.golang.org/api/sheets/v4"
 )
 
-type GoogleApiAuthSpread struct{}
+type GoogleApiAuthSpread struct {
+	auth_common_methods
+}
 
 //go:embed config/credentials.json
 var credentials_spread []byte
@@ -29,7 +30,8 @@ func (h GoogleApiAuthSpread) CredentialApi(fileId string, sheetModel *[]model.Do
 	if err != nil {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
-	client, err := h.getClient(config)
+	tokFile := "token.json"
+	client, err := h.getClient(tokFile, config)
 	if err != nil {
 		authURL := config.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
 		return authURL, err
@@ -61,31 +63,6 @@ func (h GoogleApiAuthSpread) CredentialApi(fileId string, sheetModel *[]model.Do
 
 	return "", nil
 
-}
-
-// Retrieve a token, saves the token, then returns the generated client.
-func (h GoogleApiAuthSpread) getClient(config *oauth2.Config) (*http.Client, error) {
-	// The file token.json stores the user's access and refresh tokens, and is
-	// created automatically when the authorization flow completes for the first
-	// time.
-	tokFile := "token.json"
-	tok, err := h.tokenFromFile(tokFile)
-	if err != nil {
-		return nil, err
-	}
-	return config.Client(context.Background(), tok), nil
-}
-
-// Retrieves a token from a local file.
-func (h GoogleApiAuthSpread) tokenFromFile(file string) (*oauth2.Token, error) {
-	f, err := os.Open(file)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-	tok := &oauth2.Token{}
-	err = json.NewDecoder(f).Decode(tok)
-	return tok, err
 }
 
 // Saves a token to a file path.
