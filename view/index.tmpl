@@ -1,6 +1,7 @@
-<html>
-{{range .data_model}}
-{{.Title|safehtml}}
-{{.Body|safehtml}}
+{{define "index"}}
+<h1>test content</h1>
+	{{range .data_model}}
+	{{.Title|safehtml}}
+	{{.Body|safehtml}}
+	{{end}}
 {{end}}
-</html>

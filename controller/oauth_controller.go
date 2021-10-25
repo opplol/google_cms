@@ -22,7 +22,7 @@ func (h OauthController) Callback(c *gin.Context) {
 	author := new(lib.GoogleApiAuthSpread)
 	author.SaveToken("token.json", callbackPrams.Code)
 
-	location := url.URL{Path: "/test/show"}
+	location := url.URL{Path: "/event/index"}
 	c.Redirect(http.StatusTemporaryRedirect, location.RequestURI())
 }
 
@@ -32,6 +32,6 @@ func (h OauthController) DriveCallback(c *gin.Context) {
 	author := new(lib.GoogleApiAuthDrive)
 	author.SaveToken("drive_token.json", callbackPrams.Code)
 
-	location := url.URL{Path: "/test/list"}
+	location := url.URL{Path: "/event/index"}
 	c.Redirect(http.StatusTemporaryRedirect, location.RequestURI())
 }

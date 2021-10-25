@@ -20,7 +20,8 @@ func (h DocumentController) Show(c *gin.Context) {
 
 	valid_google_oauth_and_get_data(c, "test", &documentModel)
 	fmt.Printf("%#v\n", documentModel)
-	c.HTML(http.StatusOK, "/view/index.tmpl", gin.H{
+	c.HTML(http.StatusOK, "index", gin.H{
+		"title":      "multi template test",
 		"data_model": documentModel,
 	})
 }
@@ -41,7 +42,20 @@ func (h DocumentController) Pages(c *gin.Context) {
 	fmt.Printf("%#v\n", file_id)
 
 	valid_google_oauth_and_get_data(c, file_id, &documentModel)
-	c.HTML(http.StatusOK, "/view/index.tmpl", gin.H{
+	c.HTML(http.StatusOK, "event_list", gin.H{
+		"title":      "multi template test",
+		"data_model": documentModel,
+	})
+}
+
+func (h DocumentController) PagesInContent(c *gin.Context) {
+	documentModel := make([]model.DocuFirst, 0)
+	file_id := valid_google_oauth_and_get_list(c)
+	fmt.Printf("%#v\n", file_id)
+
+	valid_google_oauth_and_get_data(c, file_id, &documentModel)
+	c.HTML(http.StatusOK, "content", gin.H{
+		"title":      "multi template test",
 		"data_model": documentModel,
 	})
 }

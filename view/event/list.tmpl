@@ -1,0 +1,48 @@
+{{ define "page_content" }}
+<div class="col-md-12 col-sm-12 col-xs-12">
+  <div class="x_panel">
+    <div class="x_title">
+      <h2>Lostarkイベントスケジュール</h2>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="x_content">
+
+      <p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p>
+
+      <div class="table-responsive">
+        <table class="table table-striped jambo_table bulk_action">
+          <thead>
+            <tr class="headings">
+              <th>
+                <div class="icheckbox_flat-green" style="position: relative;"><input type="checkbox" id="check-all"
+                    class="flat" style="position: absolute; opacity: 0;"><ins class="iCheck-helper"
+                    style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                </div>
+              </th>
+              <th class="column-title">イベント名</th>
+              <th class="column-title">日時</th>
+              <th class="column-title no-link last"><span class="nobr">通知予約</span>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+          {{ range $i, $e := .data_model }}
+            <tr class="pointer {{ $i|evenOrOdd }}">
+              <td class="a-center ">
+                <div class="icheckbox_flat-green" style="position: relative;"><input type="checkbox" class="flat"
+                    name="table_records" style="position: absolute; opacity: 0;"><ins class="iCheck-helper"
+                    style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                </div>
+              </td>
+              <td class=" ">{{ .Title|safehtml }}</td>
+              <td class=" ">{{ .Date|safehtml }}</td>
+              <td class=" last"><a href="#">View</a>
+              </td>
+            </tr>
+          {{ end }}
+          </tbody>
+        </table>
+      </div>
+      {{ end }}
