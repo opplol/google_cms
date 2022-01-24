@@ -30,6 +30,6 @@ self.addEventListener('notificationclick', function (event) {
 
   event.waitUntil(
       // プッシュ通知をクリックしたときにブラウザを起動して表示するURL
-      clients.openWindow('http://localhost:8080/event/list')
+      clients.openWindow('http://localhost:8080/event/index')
   );
 });

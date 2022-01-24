@@ -42,7 +42,7 @@ func (h DocumentController) Pages(c *gin.Context) {
 	fmt.Printf("%#v\n", file_id)
 
 	valid_google_oauth_and_get_data(c, file_id, &documentModel)
-	c.HTML(http.StatusOK, "event_list", gin.H{
+	c.HTML(http.StatusOK, "content", gin.H{
 		"title":      "multi template test",
 		"data_model": documentModel,
 	})

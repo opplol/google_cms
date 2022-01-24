@@ -42,6 +42,21 @@ func (h EventController) Subscribe(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"row_num": subscribe_model.ID})
 }
 
+func (h EventController) UnSubscribe(c *gin.Context) {
+	db_conn, err := model.NewGolangAppConnection()
+	if err != nil {
+		panic("Db connection Fail")
+	}
+	var subscribe model.Subscribe
+	db_conn.First(&subscribe, "end_point = ?", c.PostForm("end_point"))
+	fmt.Printf("%#v\n", subscribe.ID)
+	if subscribe.ID > 0 {
+		db_conn.Delete(&subscribe)
+	}
+
+	c.JSON(http.StatusOK, gin.H{"row_num": subscribe.ID})
+}
+
 func (h EventController) PushMe(c *gin.Context) {
 	// Decode subscription
 	public_key := os.Getenv("WEB_PUSH_PUBLIC_KEY")
@@ -57,7 +72,7 @@ func (h EventController) PushMe(c *gin.Context) {
 		json.Unmarshal([]byte(``), s)
 
 		// Send Notification
-		resp, err := webpush.SendNotification([]byte("PUSH Test"), s, &webpush.Options{
+		resp, err := webpush.SendNotification([]byte("PUSH Test PUSHPUSH!"), s, &webpush.Options{
 			Subscriber:      "example@example.com",
 			VAPIDPublicKey:  public_key,
 			VAPIDPrivateKey: private_key,

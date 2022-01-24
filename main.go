@@ -29,7 +29,7 @@ func createHtmlRender() multitemplate.Renderer {
 		"view/common/side_bar.tmpl", "view/common/top_nav.tmpl",
 		"view/common/include_js.tmpl", "view/common/footer.tmpl"}
 	renderer.AddFromFilesFuncs("index", t, baseLayout...)
-	renderer.AddFromFilesFuncs("content", t, "view/base.tmpl", "view/content.tmpl")
+	renderer.AddFromFilesFuncs("content", t, append(baseLayout, "view/content.tmpl")...)
 	renderer.AddFromFilesFuncs("event_list", t, append(baseLayout, "view/event/list.tmpl")...)
 
 	return renderer
@@ -89,8 +89,9 @@ func main() {
 		event_engine.GET("/index", event_controller.Index)
 		event_engine.GET("/push_me", event_controller.PushMe)
 		event_engine.POST("/subscribe", event_controller.Subscribe)
+		event_engine.POST("/unsubscribe", event_controller.UnSubscribe)
 	}
-	r.Run(":8080")
+	r.Run(":1080")
 
 }
 

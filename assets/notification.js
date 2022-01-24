@@ -64,6 +64,32 @@ async function allowWebPush() {
     });
 }
 
+async function unscribe() {
+  await window.sw.pushManager.getSubscription().then((subs) => {
+    subs.unsubscribe().then(function (successful) {
+      console.log(subs)
+      $.ajax({
+        url: '/event/unsubscribe',
+        type: 'post',
+        cache: false,
+        dataType: 'json',
+        data: { end_point: subs.endpoint }
+      })
+        .done(function (response) { //通信が成功したときのコールバックの処理を書く
+          alert("解除に成功しました");
+        })
+        .fail(function (xhr) { //通信が失敗したときのコールバックの処理を書く
+          alert("解除に失敗しました");
+        })
+        .always(function (xhr, msg) { //通信結果にかかわらず実行する処理を書く
+        });
+    }).catch(function (e) {
+      alert("解除に失敗しました");
+    })
+
+  })
+}
+
 
 
 /**
